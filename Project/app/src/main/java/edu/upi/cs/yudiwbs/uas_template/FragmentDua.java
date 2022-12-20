@@ -7,9 +7,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -59,8 +65,47 @@ public class FragmentDua extends Fragment {
         binding.buttonFrag2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alHasil.add(new Hasil("satu..."));
-                adapter.notifyDataSetChanged();
+
+                // Load data dari API
+                ApiBored.get(null, new JsonHttpResponseHandler() {
+                    @Override
+                    //hati2 success jsonobjek atau jsonarray
+                    public void onSuccess(int statusCode,
+                                          cz.msebera.android.httpclient.Header[] headers,
+                                          org.json.JSONObject response) {
+                        Log.d("debug_ari","onSuccess jsonobjek");
+
+                        //ambil type dan activity
+                        String type = "";
+                        String activity = "";
+                        try {
+                            type = (String) response.get("type");
+                            activity = (String) response.get("activity");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("debug_ari", "msg error" +":" +e.getMessage());
+                        }
+                        // Tambahkan hasil data dari api ke recycler view
+                        Log.d("debug_ari", "activity" +":" +activity);
+                        alHasil.add(new Hasil(type));
+                        alHasil.add(new Hasil(activity));
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    public void onSuccess(int statusCode,
+                                          cz.msebera.android.httpclient.Header[] headers,
+                                          org.json.JSONArray response) {
+                        Log.d("debug_ari","onSuccess jsonarray");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.e("debug_ari", "error " + ":" + statusCode +":"+ errorResponse.toString());
+                    }
+                });
+
+//                alHasil.add(new Hasil("satu..."));
+//                adapter.notifyDataSetChanged();
             }
         });
         return view;
