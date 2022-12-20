@@ -40,7 +40,6 @@ public class FragmentDua extends Fragment implements SensorEventListener {
     // sensor
     private SensorManager sm;
     private Sensor senAccel;
-    private TextView tvCekSensor;
     private boolean isTerangkat;
     private int writen;
 
@@ -65,8 +64,6 @@ public class FragmentDua extends Fragment implements SensorEventListener {
                              Bundle savedInstanceState) {
         binding = FragmentDuaBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-
-        tvCekSensor = view.findViewById(R.id.tvCekSensor);
 
         adapter = new AdapterHasil(alHasil);
         binding.rvHasil.setAdapter(adapter);
@@ -120,7 +117,6 @@ public class FragmentDua extends Fragment implements SensorEventListener {
                 alHasil.add(new Hasil(ts));
                 alHasil.add(new Hasil("HP Diangkat!"));
                 adapter.notifyDataSetChanged();
-                tvCekSensor.setText("HP Diangkat!");
                 // jika sudah ditulis terangkat setelah sensor mendeteksi hp terangkat,
                 // tandai sudah ditulis ke recycler view
                 writen = 1;
@@ -131,7 +127,6 @@ public class FragmentDua extends Fragment implements SensorEventListener {
             // Menampilkan log dari accelerometer beserta timestamp
             String msg = "X: " + ax + ", Y: " + ay + ", Z: " + az + ", Timestamp: " + timestamp;
             Log.d("debug_yudi", msg);
-            tvCekSensor.setText(msg);
             writen = 0;
         }
     }
