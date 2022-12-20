@@ -66,10 +66,6 @@ public class FragmentSatu extends Fragment {
         binding.rvHasilFragSatu.setAdapter(adapter);
 
         lm = new LinearLayoutManager(getActivity());
-        //restore state recylerview
-        if (vmRVBoredApi.getRecViewState().getValue()!=null) {
-            lm.onRestoreInstanceState(vmRVBoredApi.getRecViewState().getValue());
-        }
         binding.rvHasilFragSatu.setLayoutManager(lm);
 
         //supaya ada garis antar row
@@ -121,6 +117,18 @@ public class FragmentSatu extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated (View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        lm = new LinearLayoutManager(getActivity());
+        //restore state recylerview
+        if (vmRVBoredApi.getRecViewState().getValue()!=null) {
+            lm.onRestoreInstanceState(vmRVBoredApi.getRecViewState().getValue());
+        }
+        binding.rvHasilFragSatu.setLayoutManager(lm);
     }
 
     @Override
